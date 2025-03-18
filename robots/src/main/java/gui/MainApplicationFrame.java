@@ -4,9 +4,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
 
 import log.Logger;
+
+import javax.swing.*;
 
 
 public class MainApplicationFrame extends JFrame {
