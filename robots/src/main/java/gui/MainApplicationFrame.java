@@ -30,6 +30,8 @@ public class MainApplicationFrame extends JFrame {
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
 
+        WindowConfigManager.loadWindows(desktopPane);
+
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -124,6 +126,7 @@ public class MainApplicationFrame extends JFrame {
                 Select.NO);
 
         if (response == JOptionPane.YES_OPTION) {
+            WindowConfigManager.saveWindows(desktopPane);
             System.exit(0);
         }
     }
