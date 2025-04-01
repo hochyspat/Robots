@@ -12,6 +12,7 @@ import javax.swing.*;
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    private final WindowConfigManager windowConfigManager = new WindowConfigManager();
 
     public MainApplicationFrame() {
         int inset = 50;
@@ -30,7 +31,7 @@ public class MainApplicationFrame extends JFrame {
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
 
-        WindowConfigManager.loadWindows(desktopPane);
+        windowConfigManager.loadWindows(desktopPane);
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -126,7 +127,7 @@ public class MainApplicationFrame extends JFrame {
                 Select.NO);
 
         if (response == JOptionPane.YES_OPTION) {
-            WindowConfigManager.saveWindows(desktopPane);
+            windowConfigManager.saveWindows(desktopPane);
             System.exit(0);
         }
     }
