@@ -34,7 +34,13 @@ public class MainApplicationFrame extends JFrame {
         windowConfigManager.loadWindows(desktopPane);
 
         setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                closeWithConfirmation();
+            }
+        });
     }
 
     protected LogWindow createLogWindow() {

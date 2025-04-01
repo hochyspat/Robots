@@ -33,12 +33,12 @@ public record WindowGeometry(int x, int y, int width, int height, boolean minimi
         frame.setMaximum(maximized);
     }
 
-    void saveTo(Properties props, String key) {
-        props.setProperty(key + ".x", String.valueOf(x));
-        props.setProperty(key + ".y", String.valueOf(y));
-        props.setProperty(key + ".width", String.valueOf(width));
-        props.setProperty(key + ".height", String.valueOf(height));
-        props.setProperty(key + ".minimized", String.valueOf(minimized));
-        props.setProperty(key + ".maximized", String.valueOf(maximized));
+    void saveTo(Properties props, String windowName) {
+        props.setProperty(windowName + ".x", String.valueOf(x));
+        props.setProperty(windowName + ".y", String.valueOf(y));
+        props.setProperty(windowName + ".width", String.valueOf(width));
+        props.setProperty(windowName + ".height", String.valueOf(height));
+        props.setProperty(windowName + ".minimized", String.valueOf(minimized));
+        props.setProperty(windowName + ".maximized", String.valueOf(maximized));
     }
 }

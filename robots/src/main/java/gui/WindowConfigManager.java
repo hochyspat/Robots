@@ -22,10 +22,10 @@ public class WindowConfigManager {
             JInternalFrame[] frames = (JInternalFrame[]) getAllFramesMethod.invoke(desktopPane);
 
             for (JInternalFrame frame : frames) {
-                String key = frame.getTitle().replaceAll("\\s+", "_");
+                String windowName = frame.getTitle().replaceAll("\\s+", "_");
                 try {
                     WindowGeometry geometry = new WindowGeometry(frame);
-                    geometry.saveTo(props, key);
+                    geometry.saveTo(props, windowName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -56,9 +56,9 @@ public class WindowConfigManager {
             JInternalFrame[] frames = (JInternalFrame[]) getAllFramesMethod.invoke(desktopPane);
 
             for (JInternalFrame frame : frames) {
-                String key = frame.getTitle().replaceAll("\\s+", "_");
+                String windowName = frame.getTitle().replaceAll("\\s+", "_");
                 try {
-                    WindowGeometry geometry = new WindowGeometry(props, key);
+                    WindowGeometry geometry = new WindowGeometry(props, windowName);
                     geometry.applyTo(frame);
                 } catch (Exception e) {
                     e.printStackTrace();
