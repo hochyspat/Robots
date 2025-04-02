@@ -4,10 +4,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
-
 import log.Logger;
 
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 
 
 public class MainApplicationFrame extends JFrame {
@@ -30,8 +38,6 @@ public class MainApplicationFrame extends JFrame {
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
-
-        windowConfigManager.loadWindows(desktopPane);
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -133,9 +139,13 @@ public class MainApplicationFrame extends JFrame {
                 Select.NO);
 
         if (response == JOptionPane.YES_OPTION) {
-            windowConfigManager.saveWindows(desktopPane);
+            windowConfigManager.saveAllWindows(desktopPane, this);
             System.exit(0);
         }
+    }
+
+    public void applyWindowSettings() {
+        windowConfigManager.loadAllWindows(desktopPane, this);
     }
 
 

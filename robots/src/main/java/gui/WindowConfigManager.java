@@ -1,11 +1,9 @@
 package gui;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
+import javax.swing.*;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -14,33 +12,39 @@ import java.util.Properties;
 public class WindowConfigManager {
     private final Path configPath = Paths.get(System.getProperty("user.home"), ".robotapp", "windows.properties");
 
-    public void saveWindows(JDesktopPane desktopPane) {
+    public void saveAllWindows(JDesktopPane desktopPane, JFrame mainFrame) {
         Properties props = new Properties();
 
-        try {
-            Method getAllFramesMethod = JDesktopPane.class.getMethod("getAllFrames");
-            JInternalFrame[] frames = (JInternalFrame[]) getAllFramesMethod.invoke(desktopPane);
-
-            for (JInternalFrame frame : frames) {
-                String windowName = frame.getTitle().replaceAll("\\s+", "_");
-                try {
-                    WindowGeometry geometry = new WindowGeometry(frame);
-                    geometry.saveTo(props, windowName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (Files.exists(configPath)) {
+            try (InputStream in = Files.newInputStream(configPath)) {
+                props.load(in);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
 
+        new WindowGeometry(mainFrame).saveTo(props, "main");
+
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            String key = frame.getTitle().replaceAll("\\s+", "_");
+            try {
+                new WindowGeometry(frame).saveTo(props, key);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
             Files.createDirectories(configPath.getParent());
             try (OutputStream out = Files.newOutputStream(configPath)) {
                 props.store(out, "Window Geometry Settings");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void loadWindows(JDesktopPane desktopPane) {
+    public void loadAllWindows(JDesktopPane desktopPane, JFrame mainFrame) {
         if (!Files.exists(configPath)) return;
 
         Properties props = new Properties();
@@ -51,21 +55,15 @@ public class WindowConfigManager {
             return;
         }
 
-        try {
-            Method getAllFramesMethod = JDesktopPane.class.getMethod("getAllFrames");
-            JInternalFrame[] frames = (JInternalFrame[]) getAllFramesMethod.invoke(desktopPane);
+        new WindowGeometry(props, "main").applyTo(mainFrame);
 
-            for (JInternalFrame frame : frames) {
-                String windowName = frame.getTitle().replaceAll("\\s+", "_");
-                try {
-                    WindowGeometry geometry = new WindowGeometry(props, windowName);
-                    geometry.applyTo(frame);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            String key = frame.getTitle().replaceAll("\\s+", "_");
+            try {
+                new WindowGeometry(props, key).applyTo(frame);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
