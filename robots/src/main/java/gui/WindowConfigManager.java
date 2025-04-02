@@ -26,6 +26,8 @@ public class WindowConfigManager {
         new WindowGeometry(mainFrame).saveTo(props, "main");
 
         for (JInternalFrame frame : desktopPane.getAllFrames()) {
+            if (!(frame instanceof SaveableWindow)) continue;
+
             String key = frame.getTitle().replaceAll("\\s+", "_");
             try {
                 new WindowGeometry(frame).saveTo(props, key);
