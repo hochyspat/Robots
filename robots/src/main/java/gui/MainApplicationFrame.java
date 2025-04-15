@@ -4,14 +4,23 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
-
 import log.Logger;
 
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 
 
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    private final WindowConfigManager windowConfigManager = new WindowConfigManager();
 
     public MainApplicationFrame() {
         int inset = 50;
@@ -31,7 +40,13 @@ public class MainApplicationFrame extends JFrame {
         addWindow(gameWindow);
 
         setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                closeWithConfirmation();
+            }
+        });
     }
 
     protected LogWindow createLogWindow() {
@@ -124,8 +139,13 @@ public class MainApplicationFrame extends JFrame {
                 Select.NO);
 
         if (response == JOptionPane.YES_OPTION) {
+            windowConfigManager.saveAllWindows(desktopPane, this);
             System.exit(0);
         }
+    }
+
+    public void applyWindowSettings() {
+        windowConfigManager.loadAllWindows(desktopPane, this);
     }
 
 
