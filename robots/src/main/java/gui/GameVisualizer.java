@@ -22,6 +22,7 @@ public class GameVisualizer extends JPanel {
     private final Timer m_timer = initTimer();
     private movement.MovementMode movementMode = new movement.ManualMovement();
     private final RouteLoader routeLoader = new RouteLoader();
+    private final RouteSaver routeSaver = new RouteSaver();
 
     private static Timer initTimer() {
         Timer timer = new Timer("events generator", true);
@@ -63,6 +64,12 @@ public class GameVisualizer extends JPanel {
         initMouseControls();
         new RouteKeyHandler(this);
         setDoubleBuffered(true);
+    }
+
+    public void saveCustomRouteToFile(File file) {
+        if (!customRoute.isEmpty()) {
+            routeSaver.saveToFile(customRoute, file);
+        }
     }
 
     private void initMouseControls() {

@@ -12,6 +12,7 @@ import java.util.List;
 
 public class GameWindow extends JInternalFrame implements SaveableWindow {
     private final GameVisualizer m_visualizer;
+    private final RouteSaver routeSaver = new RouteSaver();
 
     public GameWindow() {
         super("Игровое поле", true, true, true, true);
@@ -20,9 +21,10 @@ public class GameWindow extends JInternalFrame implements SaveableWindow {
 
         JComboBox<MovementModeType> modeBox = new JComboBox<>(MovementModeType.values());
 
+        JButton saveButton = new JButton("Сохранить маршрут");
+
         modeBox.addActionListener(e -> {
             MovementModeType selected = (MovementModeType) modeBox.getSelectedItem();
-
 
             if (selected != MovementModeType.CUSTOM_MOUSE) {
                 m_visualizer.disableCustomRouteMode();
@@ -43,7 +45,7 @@ public class GameWindow extends JInternalFrame implements SaveableWindow {
 
                 case LOAD_FROM_FILE -> {
                     JFileChooser chooser = new JFileChooser();
-                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                         File file = chooser.getSelectedFile();
                         m_visualizer.loadCustomRouteFromFile(file);
                     }
@@ -51,8 +53,23 @@ public class GameWindow extends JInternalFrame implements SaveableWindow {
             }
         });
 
+        saveButton.addActionListener(e -> {
+            if (!m_visualizer.getCustomRoute().isEmpty()) {
+                JFileChooser chooser = new JFileChooser();
+                if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    m_visualizer.saveCustomRouteToFile(file);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Сначала постройте маршрут вручную.", "Нет маршрута", JOptionPane.WARNING_MESSAGE);
+            }
+        });
 
-        panel.add(modeBox, BorderLayout.NORTH);
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(modeBox);
+        topPanel.add(saveButton);
+
+        panel.add(topPanel, BorderLayout.NORTH);
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
