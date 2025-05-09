@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 import log.Logger;
+import model.RobotModel;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -35,9 +36,17 @@ public class MainApplicationFrame extends JFrame {
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.setSize(400, 400);
+        RobotModel model = new RobotModel();
+        GameWindow gameWindow = new GameWindow(model);
+        CoordinatesWindow coordinatesWindow = new CoordinatesWindow();
+        coordinatesWindow.setLocation(420, 10);
+        coordinatesWindow.setSize(200, 100);
+        model.addListener(coordinatesWindow);
+
         addWindow(gameWindow);
+        addWindow(coordinatesWindow);
+
+        gameWindow.setSize(400, 400);
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

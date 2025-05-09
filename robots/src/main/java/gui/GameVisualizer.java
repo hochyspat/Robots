@@ -1,5 +1,6 @@
 package gui;
 
+import model.RobotModel;
 import movement.CustomRouteMovement;
 
 import java.awt.Color;
@@ -57,9 +58,11 @@ public class GameVisualizer extends JPanel {
     private boolean customRouteActive = false;
     private boolean routePaused = false;
     private boolean loadedFromFile = false;
+    private final RobotModel model;
 
 
-    public GameVisualizer() {
+    public GameVisualizer(RobotModel model) {
+        this.model = model;
         initTimers();
         initMouseControls();
         new RouteKeyHandler(this);
@@ -242,6 +245,7 @@ public class GameVisualizer extends JPanel {
         m_robotPositionX = newX;
         m_robotPositionY = newY;
         m_robotDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
+        model.updatePosition(m_robotPositionX, m_robotPositionY, m_robotDirection);
     }
 
 
