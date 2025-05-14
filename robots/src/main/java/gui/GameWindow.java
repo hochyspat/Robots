@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import model.RobotModel;
 import movement.*;
 
 import java.awt.Point;
@@ -14,9 +15,9 @@ public class GameWindow extends JInternalFrame implements SaveableWindow {
     private final GameVisualizer m_visualizer;
     private final RouteSaver routeSaver = new RouteSaver();
 
-    public GameWindow() {
+    public GameWindow(RobotModel model) {
         super("Игровое поле", true, true, true, true);
-        m_visualizer = new GameVisualizer();
+        m_visualizer = new GameVisualizer(model);
         JPanel panel = new JPanel(new BorderLayout());
 
         JComboBox<MovementModeType> modeBox = new JComboBox<>(MovementModeType.values());
