@@ -38,7 +38,7 @@ public class MainApplicationFrame extends JFrame {
 
         RobotModel model = new RobotModel();
         GameWindow gameWindow = new GameWindow(model);
-        CoordinatesWindow coordinatesWindow = new CoordinatesWindow();
+        CoordinatesWindow coordinatesWindow = new CoordinatesWindow(model);
         coordinatesWindow.setLocation(420, 10);
         coordinatesWindow.setSize(200, 100);
         model.addListener(coordinatesWindow);
