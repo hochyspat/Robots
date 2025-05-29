@@ -18,12 +18,12 @@ public class PatrolMovement implements MovementMode {
         if (route.isEmpty()) return;
 
         Point target = route.get(currentIndex);
+        boolean reached = visualizer.getMover().moveTowards(target);
+
         visualizer.setTargetPosition(target);
 
-        if (visualizer.isNearTarget(target)) {
+        if (reached) {
             currentIndex = (currentIndex + 1) % route.size();
         }
-
-        visualizer.updateManual();
     }
 }

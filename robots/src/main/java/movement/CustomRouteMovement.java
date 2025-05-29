@@ -18,12 +18,11 @@ public class CustomRouteMovement implements MovementMode {
         if (route == null || route.isEmpty()) return;
 
         Point target = route.get(currentIndex);
-        if (visualizer.isNearTarget(target)) {
-            currentIndex = (currentIndex + 1) % route.size();
-            target = route.get(currentIndex);
-            visualizer.setTargetPosition(target);
-        }
+        boolean reached = visualizer.getMover().moveTowards(target);
 
-        visualizer.updateManual();
+        if (reached) {
+            currentIndex = (currentIndex + 1) % route.size();
+            visualizer.setTargetPosition(route.get(currentIndex));
+        }
     }
 }
