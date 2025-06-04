@@ -6,21 +6,19 @@ import java.awt.Point;
 import java.util.List;
 
 public class PatrolMovement implements MovementMode {
-    private final List<Point> route;
+    private final CachedRoute route;
     private int currentIndex = 0;
 
-    public PatrolMovement(List<Point> route) {
-        this.route = route;
+    public PatrolMovement(List<Point> points) {
+        this.route = new CachedRoute(points);
     }
 
     @Override
     public void update(GameVisualizer visualizer) {
-        if (route.isEmpty()) return;
+        RouteCacheEntry entry = route.getEntry(currentIndex);
+        boolean reached = visualizer.getMover().moveTowards(entry.to());
 
-        Point target = route.get(currentIndex);
-        boolean reached = visualizer.getMover().moveTowards(target);
-
-        visualizer.setTargetPosition(target);
+        visualizer.setTargetPosition(entry.to());
 
         if (reached) {
             currentIndex = (currentIndex + 1) % route.size();

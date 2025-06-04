@@ -6,23 +6,21 @@ import java.awt.Point;
 import java.util.List;
 
 public class CustomRouteMovement implements MovementMode {
-    private final List<Point> route;
+    private final CachedRoute route;
     private int currentIndex = 0;
 
-    public CustomRouteMovement(List<Point> route) {
-        this.route = route;
+    public CustomRouteMovement(List<Point> points) {
+        this.route = new CachedRoute(points);
     }
 
     @Override
     public void update(GameVisualizer visualizer) {
-        if (route == null || route.isEmpty()) return;
-
-        Point target = route.get(currentIndex);
-        boolean reached = visualizer.getMover().moveTowards(target);
+        RouteCacheEntry entry = route.getEntry(currentIndex);
+        boolean reached = visualizer.getMover().moveTowards(entry.to());
 
         if (reached) {
             currentIndex = (currentIndex + 1) % route.size();
-            visualizer.setTargetPosition(route.get(currentIndex));
+            visualizer.setTargetPosition(route.getEntry(currentIndex).to());
         }
     }
 }
